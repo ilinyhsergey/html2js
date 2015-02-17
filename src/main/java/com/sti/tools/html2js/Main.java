@@ -1,6 +1,6 @@
 package com.sti.tools.html2js;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
 
@@ -8,8 +8,32 @@ public class Main {
 
         Arguments arguments = new Arguments().fulfill(args);
 
-        System.out.println(arguments);
+//        System.out.println(arguments);
 
+        String template = readTemplate(arguments);
+
+        System.out.println(template);
+
+    }
+
+    private static String readTemplate(Arguments arguments) throws IOException {
+        StringBuilder template = new StringBuilder();
+        String line;
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(new File(arguments.templateName)));
+            while ((line = reader.readLine()) != null) {
+                template.append(line).append('\n');
+            }
+            reader.close();
+            reader = null;
+        } finally {
+            if (reader != null)
+                reader.close();
+        }
+
+        return template.toString();
     }
 
 }

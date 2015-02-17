@@ -4,10 +4,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.io.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Properties;
 
 /**
  * Unit test for simple App.
@@ -52,7 +48,6 @@ public class AppTest
         assertEquals("template.js", fulfill.templateName);
         assertEquals("src0.html", fulfill.sourceNames.get(0));
         assertEquals("src1.html", fulfill.sourceNames.get(1));
-
     }
 
 }
