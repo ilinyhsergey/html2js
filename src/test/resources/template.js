@@ -1,17 +1,8 @@
 // js header
-
-{{ begin}}
-
-(function(){
-    "use strict";
-
-    var fileName = {{ name }};
-    var fileContent = {{content }};
-
-})();
-
+{{ for}}
+    {{name }}
+    {{ content }}
 {{
     end
 }}
-
 // js footer

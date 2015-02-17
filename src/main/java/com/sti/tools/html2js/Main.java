@@ -1,8 +1,12 @@
 package com.sti.tools.html2js;
 
 import java.io.*;
+import java.util.regex.Pattern;
 
 public class Main {
+
+    public static final Pattern nameReplacePattern = Pattern.compile("\\{\\{(\\s*name\\s*)\\}\\}", Pattern.DOTALL);
+    public static final Pattern contentReplacePattern = Pattern.compile("\\{\\{(\\s*content\\s*)\\}\\}", Pattern.DOTALL);
 
     public static void execute(String[] args) throws IOException, IllegalArgumentException {
 
@@ -12,7 +16,25 @@ public class Main {
 
         String template = readTemplate(arguments);
 
-        System.out.println(template);
+        Template t = Template.parse(template);
+
+        System.out.println(t);
+        // todo итерация по файлам источникам, замена, сборка.
+/*
+        Matcher m = replacePattern.matcher(template);
+        StringBuffer b = new StringBuffer();
+
+        while(m.find()){
+            Object aliasValue = params.get(m.group(1));
+
+            if (aliasValue != null && aliasValue instanceof String){
+                m.appendReplacement(b, (String)aliasValue);
+            } else {
+                m.appendReplacement(b, gson.toJson(aliasValue));
+            }
+        }
+        m.appendTail(b);
+*/
 
     }
 
