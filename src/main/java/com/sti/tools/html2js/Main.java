@@ -8,6 +8,7 @@ public class Main {
 
     public static final Pattern nameReplacePattern = Pattern.compile("(\\{\\{\\s*name\\s*\\}\\})", Pattern.DOTALL);
     public static final Pattern contentReplacePattern = Pattern.compile("(\\{\\{\\s*content\\s*\\}\\})", Pattern.DOTALL);
+    public static final Pattern escapeReplacePattern = Pattern.compile("(\")");
 
     public static void execute(String[] args) throws IOException, IllegalArgumentException {
 
@@ -38,11 +39,18 @@ public class Main {
     }
 
     public static String formatHtmlToJs(String html){
-        String js = html;
+        String replacedHtml = Tools.replace(new StringBuffer(), html, "\\\"", escapeReplacePattern).toString();
 
-        // todo
+        String[] lines = replacedHtml.split("\n");
+        StringBuilder builder = new StringBuilder();
 
-        return js;
+        for (String line: lines){
+            if (builder.length() > 0)
+                builder.append(" +\n");
+            builder.append("\"").append(line).append("\"");
+        }
+
+        return builder.toString();
     }
 
 }

@@ -1,7 +1,7 @@
 // js header
 {{ for}}
-    {{name }}
-    {{ content }}
+    var fileName = '{{name }}';
+    var filecontent = {{ content }};
 {{
     end
 }}

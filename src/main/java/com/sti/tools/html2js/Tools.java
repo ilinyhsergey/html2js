@@ -36,7 +36,7 @@ public class Tools {
     public static StringBuffer replace(StringBuffer buffer, String template, String replaceContent, Pattern pattern) {
         Matcher m = pattern.matcher(template);
         while (m.find()) {
-            m.appendReplacement(buffer, replaceContent);
+            m.appendReplacement(buffer, Matcher.quoteReplacement(replaceContent));
         }
         m.appendTail(buffer);
         return buffer;
