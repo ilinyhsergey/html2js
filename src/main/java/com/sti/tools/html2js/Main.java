@@ -1,6 +1,6 @@
 package com.sti.tools.html2js;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -20,7 +20,7 @@ public class Main {
 
         StringBuffer buffer = fillInTemplate(t, arguments.sourceNames);
 
-        System.out.println(buffer.toString());
+        Tools.writeFile(arguments.outputName, buffer.toString());
     }
 
     public static StringBuffer fillInTemplate(Template t, List<String> sourceNames) throws IOException{

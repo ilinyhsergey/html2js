@@ -1,9 +1,6 @@
 package com.sti.tools.html2js;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +28,19 @@ public class Tools {
         }
 
         return template.toString();
+    }
+    public static void writeFile(String outputName, String content) throws IOException {
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(new File(outputName)));
+            writer.write(content, 0, content.length());
+//            writer.newLine();
+        } finally {
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
+        }
     }
 
     public static StringBuffer replace(StringBuffer buffer, String template, String replaceContent, Pattern pattern) {
