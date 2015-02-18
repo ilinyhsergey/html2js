@@ -4,6 +4,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  * Unit test for simple App.
@@ -50,6 +52,58 @@ public class AppTest
         assertEquals("src1.html", fulfill.sourceNames.get(1));
 
 
+    }
+
+    public void testReplace() {
+        String censored = Tools.replace("$1<a>\\<b>foo</b>\\</a>$2\\<b>bar</b>\\$3$4$5$6$7", "censored", Pattern.compile("<b>(.*?)</b>")).toString();
+        assertEquals("$1<a>\\censored\\</a>$2\\censored\\$3$4$5$6$7", censored);
+    }
+
+    public void testFormatHtmlToJs() {
+        String js = Tools.formatHtmlToJs("<div></div>\n<a></a>");
+        assertEquals("\"<div></div>\" +\n\"<a></a>\"", js);
+    }
+
+    public void testProcessTemplateBody() {
+        HashMap<String, String> contentMap = new HashMap<String, String>(){{
+            put("src1.html", "foo");
+            put("src2.html", "bar");
+        }};
+        String template = "var name = '{{\n   name \t}}', content = {{ content\n}}\n";
+        assertEquals("var name = 'src2.html', content = bar\n" +
+                "var name = 'src1.html', content = foo\n", Tools.processTemplateBody(template, contentMap));
+    }
+
+    public void testPlaceContentInTemplate() {
+        HashMap<String, String> contentMap = new HashMap<String, String>(){{
+            put("src1.html", "\"<div ng-class=\\\"{main:isMain}\\\">file 1 $3</div>\"");
+            put("src2.html", "\"<body ng-show='false'>file 2</body>\"");
+        }};
+        String template = "// js header\n" +
+                "{{ for}}\n" +
+                "    var fileName = '{{name }}';\n" +
+                "    var filecontent = {{ content }};\n" +
+                "{{\n" +
+                "    end\n" +
+                "}}\n" +
+                "var names = [];\n" +
+                "{{for}}names.push('{{name}}');{{end}}\n" +
+                "console.log(names);\n" +
+                "// js footer";
+        String res = Tools.placeContentInTemplate(template, contentMap).toString();
+
+        assertEquals("// js header\n" +
+                "\n" +
+                "    var fileName = 'src2.html';\n" +
+                "    var filecontent = \"<body ng-show='false'>file 2</body>\";\n" +
+                "\n" +
+                "    var fileName = 'src1.html';\n" +
+                "    var filecontent = \"<div ng-class=\\\"{main:isMain}\\\">file 1 $3</div>\";\n" +
+                "\n" +
+                "var names = [];\n" +
+                "names.push('src2.html');names.push('src1.html');\n" +
+                "console.log(names);\n" +
+                "// js footer", res);
     }
 
 }
