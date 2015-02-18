@@ -1,61 +1,48 @@
 package com.sti.tools.html2js;
 
-import java.io.*;
+import java.io.IOException;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Main {
 
-    public static final Pattern nameReplacePattern = Pattern.compile("\\{\\{(\\s*name\\s*)\\}\\}", Pattern.DOTALL);
-    public static final Pattern contentReplacePattern = Pattern.compile("\\{\\{(\\s*content\\s*)\\}\\}", Pattern.DOTALL);
+    public static final Pattern nameReplacePattern = Pattern.compile("(\\{\\{\\s*name\\s*\\}\\})", Pattern.DOTALL);
+    public static final Pattern contentReplacePattern = Pattern.compile("(\\{\\{\\s*content\\s*\\}\\})", Pattern.DOTALL);
 
     public static void execute(String[] args) throws IOException, IllegalArgumentException {
 
         Arguments arguments = new Arguments().fulfill(args);
 
-//        System.out.println(arguments);
-
-        String template = readTemplate(arguments);
+        String template = Tools.readFile(arguments.templateName);
 
         Template t = Template.parse(template);
 
-        System.out.println(t);
-        // todo итерация по файлам источникам, замена, сборка.
-/*
-        Matcher m = replacePattern.matcher(template);
-        StringBuffer b = new StringBuffer();
+        StringBuffer buffer = fillInTemplate(t, arguments.sourceNames);
 
-        while(m.find()){
-            Object aliasValue = params.get(m.group(1));
-
-            if (aliasValue != null && aliasValue instanceof String){
-                m.appendReplacement(b, (String)aliasValue);
-            } else {
-                m.appendReplacement(b, gson.toJson(aliasValue));
-            }
-        }
-        m.appendTail(b);
-*/
-
+        System.out.println(buffer.toString());
     }
 
-    private static String readTemplate(Arguments arguments) throws IOException {
-        StringBuilder template = new StringBuilder();
-        String line;
-        BufferedReader reader = null;
+    public static StringBuffer fillInTemplate(Template t, List<String> sourceNames) throws IOException{
+        StringBuffer collector = new StringBuffer(t.header);
+        StringBuffer buffer;
+        for (String sourceName : sourceNames) {
+            String html = Tools.readFile(sourceName);
+            String sourceContent = formatHtmlToJs(html);
 
-        try {
-            reader = new BufferedReader(new FileReader(new File(arguments.templateName)));
-            while ((line = reader.readLine()) != null) {
-                template.append(line).append('\n');
-            }
-            reader.close();
-            reader = null;
-        } finally {
-            if (reader != null)
-                reader.close();
+            buffer = Tools.replace(new StringBuffer(), t.body, sourceName, nameReplacePattern);
+            buffer = Tools.replace(new StringBuffer(), buffer.toString(), sourceContent, contentReplacePattern);
+            collector.append(buffer);
         }
+        collector.append(t.footer);
+        return collector;
+    }
 
-        return template.toString();
+    public static String formatHtmlToJs(String html){
+        String js = html;
+
+        // todo
+
+        return js;
     }
 
 }
