@@ -57,7 +57,7 @@ public class Tools {
      * @throws IOException
      */
     public static Map<String, String> prepareSourceContent(List<String> sourceNames) throws IOException {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<String, String>();
         for (String sourceName : sourceNames) {
             String html = Tools.readFile(sourceName);
             String sourceContent = formatHtmlToJs(html);
