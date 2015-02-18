@@ -48,6 +48,8 @@ public class AppTest
         assertEquals("template.js", fulfill.templateName);
         assertEquals("src0.html", fulfill.sourceNames.get(0));
         assertEquals("src1.html", fulfill.sourceNames.get(1));
+
+
     }
 
 }

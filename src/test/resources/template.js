@@ -5,4 +5,7 @@
 {{
     end
 }}
+var names = [];
+{{for}}names.push('{{name}}');{{end}}
+console.log(names);
 // js footer
