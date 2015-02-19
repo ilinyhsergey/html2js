@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 public class Tools {
     public static final Pattern nameReplacePattern = Pattern.compile("(\\{\\{\\s*name\\s*\\}\\})", Pattern.DOTALL);
     public static final Pattern contentReplacePattern = Pattern.compile("(\\{\\{\\s*content\\s*\\}\\})", Pattern.DOTALL);
-    public static final Pattern escapeReplacePattern = Pattern.compile("(\")");
+    public static final Pattern backslashReplacePattern = Pattern.compile("(\\\\)");
+    public static final Pattern quotesReplacePattern = Pattern.compile("(\")");
     public static final Pattern repeatTmplatePattern = Pattern.compile("\\{\\{\\s*for\\s*\\}\\}(.*?)\\{\\{\\s*end\\s*\\}\\}", Pattern.DOTALL);
 
     public static boolean isEmptyOrNull(String value) {
@@ -72,7 +73,8 @@ public class Tools {
      * @return string represent a content as js sting
      */
     public static String formatHtmlToJs(String html) {
-        String replacedHtml = Tools.replace(html, "\\\"", escapeReplacePattern).toString();
+        String replacedHtml = Tools.replace(html, "\\\\", backslashReplacePattern).toString();
+        replacedHtml = Tools.replace(replacedHtml, "\\\"", quotesReplacePattern).toString();
 
         String[] lines = replacedHtml.split("\n");
         StringBuilder builder = new StringBuilder();

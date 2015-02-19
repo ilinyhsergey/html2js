@@ -62,6 +62,9 @@ public class AppTest
     public void testFormatHtmlToJs() {
         String js = Tools.formatHtmlToJs("<div></div>\n<a></a>");
         assertEquals("\"<div></div>\" +\n\"<a></a>\"", js);
+
+        js = Tools.formatHtmlToJs("<textarea word-validation-regexp=\"^[\\S]{0,}$\">\n</textarea>");
+        assertEquals("\"<textarea word-validation-regexp=\\\"^[\\\\S]{0,}$\\\">\" +\n\"</textarea>\"", js);
     }
 
     public void testProcessTemplateBody() {
