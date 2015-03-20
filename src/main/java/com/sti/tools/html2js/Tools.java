@@ -24,7 +24,8 @@ public class Tools {
         BufferedReader reader = null;
 
         try {
-            reader = new BufferedReader(new FileReader(new File(fileName)));
+
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName)), "UTF-8"));
             while ((line = reader.readLine()) != null) {
                 template.append(line).append('\n');
             }
@@ -38,9 +39,9 @@ public class Tools {
         return template.toString();
     }
     public static void writeFile(String outputName, String content) throws IOException {
-        BufferedWriter writer = null;
+        Writer writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(new File(outputName)));
+            writer = new OutputStreamWriter(new FileOutputStream(new File(outputName)), "UTF-8");
             writer.write(content, 0, content.length());
 //            writer.newLine();
         } finally {
